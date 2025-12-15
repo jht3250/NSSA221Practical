@@ -25,7 +25,7 @@ $RamonesUsers = @(
 )
 
 foreach ($user in $RamonesUsers) {
-    $sam = ($user.First[0] + $user.Last).ToLower()
+    $sam = ($user.First + $user.Last).ToLower()
     New-ADUser -Name "$($user.First) $($user.Last)" `
         -GivenName $user.First -Surname $user.Last `
         -SamAccountName $sam `
