@@ -16,15 +16,11 @@ log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
 log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
 log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
 
-#-------------------------------------------------------------------------------
-# Configuration - MODIFY THESE VALUES
-#-------------------------------------------------------------------------------
-DOMAIN="yourid.com"                    # Your RIT ID domain (e.g., abc1234.com)
-WEB_SERVER_HOSTNAME="web01"            # Hostname for web server
 
-#-------------------------------------------------------------------------------
-# Pre-flight checks
-#-------------------------------------------------------------------------------
+DOMAIN="jht3250.com"
+WEB_SERVER_HOSTNAME="web01"            
+
+
 if [[ $EUID -ne 0 ]]; then
    log_error "This script must be run as root"
    exit 1
@@ -32,16 +28,11 @@ fi
 
 log_info "Starting Apache web server installation..."
 
-#-------------------------------------------------------------------------------
-# Set SELinux to permissive (as recommended in lab)
-#-------------------------------------------------------------------------------
+
 log_info "Setting SELinux to permissive mode..."
 setenforce 0 2>/dev/null || true
 sed -i 's/^SELINUX=enforcing/SELINUX=permissive/' /etc/selinux/config
 
-#-------------------------------------------------------------------------------
-# Install Apache (httpd)
-#-------------------------------------------------------------------------------
 log_info "Installing Apache httpd..."
 dnf install -y httpd
 
@@ -52,16 +43,12 @@ log_info "Starting and enabling httpd service..."
 systemctl start httpd
 systemctl enable httpd
 
-#-------------------------------------------------------------------------------
-# Configure firewall for HTTP
-#-------------------------------------------------------------------------------
+
 log_info "Configuring firewall for HTTP traffic..."
 firewall-cmd --permanent --add-service=http
 firewall-cmd --reload
 
-#-------------------------------------------------------------------------------
-# Create a basic index.html
-#-------------------------------------------------------------------------------
+
 log_info "Creating default index.html..."
 cat > /var/www/html/index.html << 'EOF'
 <!DOCTYPE html>
@@ -100,7 +87,7 @@ cat > /var/www/html/index.html << 'EOF'
 </head>
 <body>
     <div class="container">
-        <h1>🚀 Apache Web Server</h1>
+        <h1> Apache Web Server</h1>
         <p>NSSA221 Systems Administration I - Lab 06</p>
         <div class="server-info">
             <p><strong>Default Site Successfully Configured!</strong></p>
@@ -110,9 +97,6 @@ cat > /var/www/html/index.html << 'EOF'
 </html>
 EOF
 
-#-------------------------------------------------------------------------------
-# Verify installation
-#-------------------------------------------------------------------------------
 log_info "Verifying Apache installation..."
 echo ""
 echo "=========================================="

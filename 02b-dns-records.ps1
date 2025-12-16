@@ -3,14 +3,12 @@
 # Run on Windows Server 2022/2025 (Domain Controller with DNS)
 #===============================================================================
 
-#-------------------------------------------------------------------------------
-# Configuration - MODIFY THESE VALUES FOR YOUR ENVIRONMENT
-#-------------------------------------------------------------------------------
-$Domain = "yourid.com"                  # Your RIT ID domain (e.g., abc1234.com)
-$WebServerHostname = "web01"            # Hostname of your Rocky Linux web server
-$WebServerIP = "192.168.10.X"           # IP address of your web server
-$VHost1Prefix = "starlord"              # First virtual host prefix
-$VHost2Prefix = "gamora"                # Second virtual host prefix
+
+$Domain = "jht3250.com"                 
+$WebServerHostname = "web01"            
+$WebServerIP = "192.168.10.12"          
+$VHost1Prefix = "starlord"              
+$VHost2Prefix = "gamora"                
 
 #-------------------------------------------------------------------------------
 # Derived variables
@@ -28,9 +26,7 @@ Write-Host "Virtual Host 1: $VHost1Prefix.$Domain"
 Write-Host "Virtual Host 2: $VHost2Prefix.$Domain"
 Write-Host ""
 
-#-------------------------------------------------------------------------------
-# Step 1: Create A Record for Web Server (if not exists)
-#-------------------------------------------------------------------------------
+
 Write-Host "[STEP 1] Creating A record for web server..." -ForegroundColor Yellow
 
 try {
@@ -47,9 +43,7 @@ try {
     Write-Host "[ERROR] Failed to create A record: $_" -ForegroundColor Red
 }
 
-#-------------------------------------------------------------------------------
-# Step 2: Create CNAME Record for www (default site)
-#-------------------------------------------------------------------------------
+
 Write-Host "[STEP 2] Creating CNAME record for www (default site)..." -ForegroundColor Yellow
 
 try {
@@ -65,9 +59,7 @@ try {
     Write-Host "[ERROR] Failed to create www CNAME: $_" -ForegroundColor Red
 }
 
-#-------------------------------------------------------------------------------
-# Step 3: Create CNAME Record for Virtual Host 1
-#-------------------------------------------------------------------------------
+
 Write-Host "[STEP 3] Creating CNAME record for $VHost1Prefix..." -ForegroundColor Yellow
 
 try {
@@ -83,9 +75,7 @@ try {
     Write-Host "[ERROR] Failed to create $VHost1Prefix CNAME: $_" -ForegroundColor Red
 }
 
-#-------------------------------------------------------------------------------
-# Step 4: Create CNAME Record for Virtual Host 2
-#-------------------------------------------------------------------------------
+
 Write-Host "[STEP 4] Creating CNAME record for $VHost2Prefix..." -ForegroundColor Yellow
 
 try {
@@ -101,9 +91,7 @@ try {
     Write-Host "[ERROR] Failed to create $VHost2Prefix CNAME: $_" -ForegroundColor Red
 }
 
-#-------------------------------------------------------------------------------
-# Verification
-#-------------------------------------------------------------------------------
+
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "DNS Records Verification" -ForegroundColor Cyan
@@ -121,9 +109,7 @@ Get-DnsServerResourceRecord -ZoneName $ZoneName -RRType A | Format-Table -Proper
 Write-Host "CNAME Records:" -ForegroundColor Green
 Get-DnsServerResourceRecord -ZoneName $ZoneName -RRType CName | Format-Table -Property HostName, RecordData -AutoSize
 
-#-------------------------------------------------------------------------------
-# Test DNS Resolution
-#-------------------------------------------------------------------------------
+
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host "Testing DNS Resolution" -ForegroundColor Cyan
